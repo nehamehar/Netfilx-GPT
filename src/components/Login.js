@@ -1,25 +1,80 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import Header from './Header'
 import { CheckErrormsg } from '../utils/validate'
+import { supabase } from '../supabaseClient'
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 const Login = () => {
+  const navigate = useNavigate();
+  const user = useSelector((store) => store.user);
+  
   const [IsSignInform , settoggleSignInform] = useState(true)
   //for error msg
   const [Errormsg, setErrormsg]= useState(null)
+  useEffect(() => {
+    // Now this code will work because 'user' is defined
+    if (user) {
+      navigate("/browse");
+    }
+  }, [user, navigate]);
+
   //if the button is signinform changeup to signup form if settoggleSignInform true IsSignInform will false if IsSignInform true settoggleSignInform false
   const toggleSignInform =()=>{
     settoggleSignInform(!IsSignInform)
   }
-  const handleButtonClick =()=>{
-    // validate if validate fails gives error msg(ERROR MSG)
-    //when click on email and pass i want to get data from both how to do?
-    // console.log(email)
-    // console.log(password)
-    // console.log(email.current.value);
-    // console.Log(password.current.value);
-    const message = CheckErrormsg(email.current.value, password.current.value, name.current.value)
-    setErrormsg(message)  
   
+  const handleButtonClick = async () => {
+  const message = CheckErrormsg(
+    email.current.value,
+    password.current.value,
+    IsSignInform ? null : name.current.value
+  );
+
+  setErrormsg(message);
+
+  if (message) {
+    return;
   }
+
+
+  if (!IsSignInform) {
+    // Sign Up
+    const { data, error } = await supabase.auth.signUp({
+      email: email.current.value,
+      password: password.current.value,
+      options: {
+        data: {
+          full_name: name.current.value,
+        },
+      },
+    });
+
+    console.log("Supabase sign up data:", data);
+    console.log("Supabase sign up error:", error);
+
+    if (error) {
+      setErrormsg(error.message);
+    } else {
+      setErrormsg("Sign Up successful! Please check your email to verify.");
+    }
+  } else {
+    // Sign In
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email.current.value,
+      password: password.current.value,
+    });
+
+    console.log("Supabase signin data:", data);
+    console.log("Supabase signin error:", error);
+
+    if (error) {
+      setErrormsg(error.message);
+    } else {
+      setErrormsg("Sign In successful!");
+    }
+  }
+};
+
   const name = useRef(null)
   const email = useRef(null)
   const password = useRef(null)
@@ -36,7 +91,7 @@ const Login = () => {
       {!IsSignInform &&( <input ref={name} type='text' placeholder='Full Name' className='w-full p-3 my-4 text-white bg-black border rounded-md bg-opacity-65 border-slate-600'/>)}
         <input ref={email} type='text' placeholder='Email or mobile number' className='w-full p-3 my-4 text-white bg-black bg-opacity-100 border rounded-md border-slate-600'/>
         <input ref={password} type='password' placeholder='Password' className='w-full p-3 my-4 text-white bg-black border rounded-md bg-opacity-65 border-slate-600'/>
-        <p className='font-semibold text-red-700 text-md'>{Errormsg}</p>
+        <p className='font-thin text-red-700 text-md'>{Errormsg}</p>
         <button className='w-full p-3 my-6 text-white bg-red-600 rounded-lg' onClick={handleButtonClick}>{IsSignInform? "Sign In" : "Sign Up"}</button> 
         <p className='font-thin cursor-pointer text-slate-400'onClick={toggleSignInform}> {IsSignInform? "New to Netflix? Sign up now." : "Already registered? Sign In Now."}</p>
       </form>
@@ -44,4 +99,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Login 
