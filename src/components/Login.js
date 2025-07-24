@@ -4,10 +4,10 @@ import { CheckErrormsg } from '../utils/validate'
 import { supabase } from '../supabaseClient'
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { LOGIN_BACKGROUNDIMG } from '../utils/constants';
 const Login = () => {
   const navigate = useNavigate();
   const user = useSelector((store) => store.user);
-  
   const [IsSignInform , settoggleSignInform] = useState(true)
   //for error msg
   const [Errormsg, setErrormsg]= useState(null)
@@ -82,7 +82,7 @@ const Login = () => {
     <div>
       <Header/>
     <div className='absolute' >
-        <img src='https://assets.nflxext.com/ffe/siteui/vlv3/a927b1ee-784d-494a-aa80-cf7a062d2523/web/IN-en-20250714-TRIFECTA-perspective_5acb7337-c372-45ec-ae12-ddb110e6ad78_medium.jpg'
+        <img src={LOGIN_BACKGROUNDIMG}
     alt='logo'/>
     </div>
     {/* making box of login with form */}

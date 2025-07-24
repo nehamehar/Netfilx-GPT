@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { supabase } from '../supabaseClient';
 import { addUser } from '../utils/userSlice';
 import Header from './Header';
-
+import { photoURL } from '../utils/constants';
 const Profile = () => {
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
@@ -41,7 +41,7 @@ const Profile = () => {
         uid: updatedUser.id,
         email: updatedUser.email,
         displayName: updatedUser.user_metadata.full_name,
-        photoURL: 'https://avatars.githubusercontent.com/u/88936961?s=400&u=3ba51bb1f98092729d1a6065bbfd3f2950fcd8bd&v=4'
+        photoURL: {photoURL}
       }));
 
       setMessage("Photo removed successfully.");

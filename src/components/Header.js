@@ -4,8 +4,9 @@ import { useSelector } from 'react-redux';
 import { supabase } from '../supabaseClient';
 //import { removeUser } from '../utils/userSlice';
 import { useNavigate } from 'react-router-dom';
-
+import { Netflix_logo } from '../utils/constants';
 import { useState } from 'react';
+import { USER_AVTAR } from '../utils/constants';
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -25,15 +26,17 @@ const Header = () => {
     
   };
   return (
-    <div className="absolute z-10 flex justify-between w-screen py-1 px-28 bg-gradient-to-b from-black"> 
-        <img className='text-4xl font-extrabold w-52' src='https://help.nflxext.com/helpcenter/OneTrust/oneTrust_production_2025-07-14/consent/87b6a5c0-0104-4e96-a291-092c11350111/01938dc4-59b3-7bbc-b635-c4131030e85f/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png'
-        alt='logo'/>
+    <div className="absolute z-10 flex justify-between w-screen px-20 py-1 bg-gradient-to-b from-black"> 
+    <img 
+        className='w-36' // Only the width class is needed here
+        src={Netflix_logo}
+        alt='logo' />
         {user && (
         <div className="relative">
           {/* 2. Toggle the dropdown when the image is clicked */}
           <img 
-            className="w-12 h-12 rounded-lg cursor-pointer"
-            src={user.photoURL || 'https://wallpapers.com/images/hd/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg'} 
+            className="w-12 h-12 m-4 rounded-lg cursor-pointer"
+            src={user.photoURL || USER_AVTAR} 
             alt="User Avatar"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           />
