@@ -34,6 +34,10 @@
 - usetrendingMovies Custom hook
 - usehorrorMovies Custom hook
 - useupcomingMovies Custom hook
+- GPT Search Page
+- GPT Search Bar
+- (BONUS) Multi-language Feature in our App
+
 
 # Features
 - Login/Sign Up

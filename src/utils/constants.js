@@ -7,9 +7,12 @@ export const API_OPTIONS = {
   headers: {
     accept: 'application/json',
     // Use the environment variable to keep your key secret
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjZDEyZTIzZGI2YmVlZmZjYjI4OGNiNzNkZjJiY2E0YSIsIm5iZiI6MTc1MzM1NTk0OS4wNTksInN1YiI6IjY4ODIxNmFkNTBlYWY2NjI1MjI0NWE3MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.VcBSSFnGsObjzy6Gjr2d_5eN3Ki7LSJfDcl_yn4PoLM'
+    Authorization: 'Bearer ' + process.env.REACT_APP_TMDB_KEY
   }
 };
 
 // You can also add other constants here
 export const TMDB_IMAGE_CDN_URL = "https://image.tmdb.org/t/p/w500";
+
+export const SUPPORTED_LANGUAGES = [{identifier:"en",name: "English"}, {identifier:"hindi",name: "Hindi"}, {identifier:"spanish",name: "Spanish"}]
+

@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 
 const MainContainer = () => {
     const movies = useSelector(store=> store.movies?.nowPlayingMovies)
-    if (movies===null) return
+       if (!movies) return;
     // i only want to show 1 movie trailler and under nowPLAYINGMovies 20 movies ther so we did
     const mainMovie = movies[0]
     const {original_title, overview, id} = mainMovie;
