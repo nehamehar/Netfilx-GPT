@@ -37,7 +37,7 @@
 - GPT Search Page
 - GPT Search Bar
 - (BONUS) Multi-language Feature in our App
-
+- Done netflix-gpt
 
 # Features
 - Login/Sign Up

@@ -3,8 +3,10 @@ import MovieList from "./MovieList";
 
 const GptMovieSuggestions = () => {
   // Correctly get the data from the Redux store
-  const { movieResults, movieNames } = useSelector((store) => store.gpt);
-
+  const { movieResults, movieNames, isLoading } = useSelector((store) => store.gpt);
+if (isLoading) {
+    return <h1 className="p-4 m-4 text-2xl text-center text-white">Please wait a moment before trying again....</h1>;
+  }
   // If there are no names yet, render nothing
   if (!movieNames) return null;
 

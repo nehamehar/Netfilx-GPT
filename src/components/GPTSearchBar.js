@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import lang from '../utils/languageConstants';
-import { model } from '../utils/gemini'; // Import the Gemini model
-import { API_OPTIONS } from '../utils/constants'; // Your TMDB options
-import { addGptMovieResult } from '../utils/gptSlice';
+import { model } from '../utils/gemini';
+import { API_OPTIONS } from '../utils/constants';
+// FIX 1: Imports are cleaned up into a single line.
+import { addGptMovieResult, setGptLoading } from '../utils/gptSlice';
 
 const GPTSearchBar = () => {
     const langKey = useSelector((store) => store.config.lang);
@@ -21,54 +22,59 @@ const GPTSearchBar = () => {
     };
 
     const handleGptSearchClick = async () => {
-    const searchQuery = searchText.current.value;
-    if (!searchQuery) return;
-
-    const gptQuery =
-      "Act as a Movie Recommendation System and suggest some movies for the query: " +
-      searchQuery +
-      ". Only give me names of 5 movies, comma separated like the example result given ahead. Example Result: Gadar, Sholay, Don, Golmaal, Koi Mil Gaya";
-
-    console.log("Sending this prompt to Gemini:", gptQuery);
-
-    // Add a try...catch block to see any hidden errors
-    try {
-      console.log("Asking Gemini for recommendations...");
-      const result = await model.generateContent(gptQuery);
-      const response = await result.response;
-      const text = response.text();
+      // Start the loading state
+      dispatch(setGptLoading(true)); 
       
-      console.log("Gemini's raw text response:", text); // <-- Log the response from Gemini
-// Andaz Apna Apna, Hera Pheri, Chupke Chupke, Jaane Bhi Do Yaaro,
-      const gptMovies = text.split(",").map(movie => movie.trim());
-      console.log("Parsed movie names:", gptMovies); // <-- Log the array of movies
+      const searchQuery = searchText.current.value;
+      if (!searchQuery) {
+        dispatch(setGptLoading(false)); // Turn off loading if search is empty
+        return;
+      }
 
-      const promiseArray = gptMovies.map(movie => searchMovieTMDB(movie));
-      const tmdbResults = await Promise.all(promiseArray);
+      const gptQuery =
+        "Act as a Movie Recommendation System and suggest some movies for the query: " +
+        searchQuery +
+        ". Only give me names of 5 movies, comma separated like the example result given ahead. Example Result: Gadar, Sholay, Don, Golmaal, Koi Mil Gaya";
 
-      console.log("Final TMDB results:", tmdbResults); // <-- Log the results from TMDB
+      try {
+        const result = await model.generateContent(gptQuery);
+        const response = await result.response;
+        const text = response.text();
+        
+        const gptMovies = text.split(",").map(movie => movie.trim());
+        const promiseArray = gptMovies.map(movie => searchMovieTMDB(movie));
+        const tmdbResults = await Promise.all(promiseArray);
 
-      dispatch(addGptMovieResult({ movieNames: gptMovies, movieResults: tmdbResults }));
+        dispatch(addGptMovieResult({ movieNames: gptMovies, movieResults: tmdbResults }));
 
-    } catch (error) {
-      console.error("ERROR during API call:", error);
-      // Here you could set an error message to show in the UI
-    }
-};
+      } catch (error) {
+        console.error("ERROR during API call:", error);
+        // You could set an error message here to show in the UI
+      } finally {
+        // FIX 2: Add this 'finally' block. This code will run
+        // whether the search was successful or failed.
+        dispatch(setGptLoading(false));
+      }
+    };
+
   return (
     <div className='pt-[10%] flex justify-center'>
-        <form className='grid w-1/2 grid-cols-12 bg-black' onSubmit={(e)=> e.preventDefault()}>
-            <input ref={searchText}
-            type='text'
-            className='col-span-9 p-4 m-4'
-            placeholder={lang[langKey].gptSearchPlaceholder}/>
-            <button className='col-span-3 px-2 py-2 m-4 text-white bg-red-600 rounded-lg' onClick={handleGptSearchClick}>
+        <form className='grid w-1/2 grid-cols-12 bg-black rounded-lg' onSubmit={(e)=> e.preventDefault()}>
+            <input 
+                ref={searchText}
+                type='text'
+                className='col-span-9 p-4 m-4 rounded-lg'
+                placeholder={lang[langKey].gptSearchPlaceholder}
+            />
+            <button 
+                className='col-span-3 px-4 py-2 m-4 text-white bg-red-600 rounded-lg' 
+                onClick={handleGptSearchClick}
+            >
                 {lang[langKey].search}
             </button>
-
         </form>
     </div>
   ) 
 }
 
-export default GPTSearchBar
+export default GPTSearchBar;

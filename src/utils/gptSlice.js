@@ -16,8 +16,11 @@ const gptSlice = createSlice({
             state.movieNames = movieNames;
             state.movieResults = movieResults;
         },
+        setGptLoading: (state, action) => {
+            state.isLoading = action.payload;
+        },
     }
 })
 
-export const {toogleGptSerachView, addGptMovieResult} = gptSlice.actions;
+export const {toogleGptSerachView, addGptMovieResult,setGptLoading} = gptSlice.actions;
 export default gptSlice.reducer;
