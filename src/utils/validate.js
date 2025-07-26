@@ -10,7 +10,7 @@ export const CheckErrormsg = (email, password, name = null)=>{
     const isPasswordValid = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/.test(password);
 
     if(!isEmailValid) return "Email ID is not valid";
-    if(!isPasswordValid) return "Password is not valid"; 
+    if(!isPasswordValid) return "Password is not valid. It must include uppercase letters, lowercase letters, numbers, and special characters."; 
     if (name!==null) {
         const isNameValid = /^[A-Za-z\s\-.']+$/.test(name);
         if (!isNameValid) return "Please enter a valid name";
