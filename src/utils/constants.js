@@ -7,7 +7,7 @@ export const API_OPTIONS = {
   headers: {
     accept: 'application/json',
     // Use the environment variable to keep your key secret
-    Authorization: 'Bearer ' + process.env.REACT_APP_TMDB_KEY
+    Authorization: 'Bearer '+ process.env.REACT_APP_TMDB_KEY
   }
 };
 

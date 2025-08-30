@@ -61,3 +61,4 @@
 - NetflixGPT
      - Search Bar
      - Movie Suggestions
+--WHEN YOU APPLY LOGIN CREDENTIALS AND THE APP DOESN'T OPEN YOU HAVE TO GO THROUGH ON KEY'S--
